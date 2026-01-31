@@ -2,144 +2,403 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>bookraf – Sosyal Bilimler Araştırma Veritabanı</title>
   <meta name="description" content="Türkiye'deki siyasi partilere dair doğrulanmış, kaynaklı ve akademik veritabanı.">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    body { font-family: Arial; margin: 40px; }
-    h1 { margin-bottom: 5px; }
-    #controls { margin: 20px 0; }
-    button { padding: 6px 12px; cursor: pointer; margin-right: 10px; }
-    .party { border-bottom: 1px solid #ddd; padding: 10px 0; }
-    small { color: #666; }
-    a.ideology { color: #0066cc; text-decoration: none; cursor: pointer; }
-    a.ideology:hover { text-decoration: underline; }
-    canvas { max-width: 600px; margin-top: 30px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    h1 { 
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+      margin-top: 10px;
+    }
+    
+    #controls { 
+      background: #f8f9fa;
+      padding: 25px 40px;
+      border-bottom: 3px solid #e0e0e0;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    button { 
+      padding: 12px 24px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button#gotoElections {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+    }
+    
+    button#gotoElections:hover {
+      box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+    }
+    
+    .content {
+      padding: 40px;
+    }
+    
+    #parties {
+      margin-bottom: 40px;
+    }
+    
+    .party { 
+      border-bottom: 1px solid #e0e0e0;
+      padding: 20px;
+      transition: all 0.3s;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .party:hover {
+      background: #f8f9fa;
+      transform: translateX(5px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .party strong {
+      font-size: 1.2em;
+      color: #1e3c72;
+      display: block;
+      margin-bottom: 8px;
+    }
+    
+    small { 
+      color: #666;
+      display: block;
+      margin: 5px 0;
+      line-height: 1.6;
+    }
+    
+    a.ideology { 
+      color: #667eea;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    
+    a.ideology:hover { 
+      background: #667eea;
+      color: white;
+    }
+    
+    .chart-container {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 12px;
+      margin-top: 40px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .chart-title {
+      font-size: 1.4em;
+      font-weight: 600;
+      color: #1e3c72;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    canvas { 
+      max-width: 100%;
+      height: 400px !important;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 5px;
+    }
+    
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1>📚 bookraf</h1>
+      <div class="subtitle">Sosyal Bilimler Araştırma Veritabanı</div>
+      <div class="subtitle" style="font-size: 0.95em; margin-top: 5px;">Türkiye'deki Siyasi Partiler - Akademik Kaynak</div>
+    </header>
 
-<h1>bookraf</h1>
-<p>Sosyal Bilimler Araştırma Veritabanı</p>
+    <div id="controls">
+      <button id="reset">🔄 Tüm Partiler</button>
+      <button id="download">📥 Excel / CSV İndir</button>
+      <button id="gotoElections">🗺️ Seçim Sonuçları Haritası</button>
+    </div>
 
-<div id="controls">
-  <button id="reset">Tüm partiler</button>
-  <button id="download">Excel / CSV İndir</button>
-  <button id="gotoElections">Seçim Sonuçları</button>
-</div>
+    <div class="content">
+      <div class="stats">
+        <div class="stat-card">
+          <span class="stat-number" id="totalParties">0</span>
+          <span class="stat-label">Toplam Parti</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="activeParties">0</span>
+          <span class="stat-label">Aktif Parti</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-number" id="oldestYear">0</span>
+          <span class="stat-label">En Eski Kuruluş</span>
+        </div>
+      </div>
 
-<div id="parties"></div>
+      <div id="parties"></div>
 
-<canvas id="partyChart"></canvas>
+      <div class="chart-container">
+        <div class="chart-title">📊 Yıllara Göre Kurulan Parti Sayısı</div>
+        <canvas id="partyChart"></canvas>
+      </div>
+    </div>
+  </div>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
+  <script src="data.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-  const parties = [
-    { name: "Cumhuriyet Halk Partisi", founded: 1923, ideologies: ["Sosyal Demokrasi", "Kemalizm"], status: "Aktif" },
-    { name: "Adalet ve Kalkınma Partisi", founded: 2001, ideologies: ["Muhafazakarlık"], status: "Aktif" },
-    { name: "Milliyetçi Hareket Partisi", founded: 1969, ideologies: ["Türk milliyetçiliği", "Milliyetçilik"], status: "Aktif" },
-    { name: "Demokrat Parti", founded: 1983, ideologies: ["Liberal muhafazakârlık"], status: "Aktif" },
-    { name: "Vatan Partisi", founded: 1992, ideologies: ["Ulusalcılık"], status: "Aktif" },
-    { name: "Genç Parti", founded: 1992, ideologies: ["Liberalizm"], status: "Aktif" },
-    { name: "Türkiye Sosyalist İşçi Partisi", founded: 1993, ideologies: ["Sol", "Komünizm", "Sosyalizm"], status: "Aktif" },
-    { name: "Büyük Birlik Partisi", founded: 1993, ideologies: ["Milliyetçilik", "Muhafazakarlık"], status: "Aktif" },
-    { name: "Türkiye Komünist Partisi", founded: 1993, ideologies: ["Sol", "Komünizm"], status: "Aktif" },
-    { name: "Sol Parti", founded: 1994, ideologies: ["Sol", "Sosyal Demokrasi"], status: "Aktif" },
-    { name: "Liberal Demokrat Parti", founded: 1994, ideologies: ["Liberalizm"], status: "Aktif" },
-    { name: "Emek Partisi", founded: 1996, ideologies: ["Sol"], status: "Aktif" },
-    { name: "Devrimci Sosyalist İşçi Partisi", founded: 1997, ideologies: ["Sol", "Sosyalizm", "Komünizm"], status: "Aktif" },
-    { name: "Saadet Partisi", founded: 2001, ideologies: ["Muhafazakarlık", "İslamcılık"], status: "Aktif" },
-    { name: "Bağımsız Türkiye Partisi", founded: 2001, ideologies: ["Muhafazakarlık"], status: "Aktif" },
-    { name: "Demokratik Sol Parti", founded: 1985, ideologies: ["Sol", "Sosyal Demokrasi"], status: "Aktif" },
-    { name: "İyi Parti", founded: 2017, ideologies: ["Türk Milliyetçiliği"], status: "Aktif" },
-    { name: "Hür Dava Partisi", founded: 2012, ideologies: ["İslamcılık"], status: "Aktif" },
-    { name: "Yeniden Refah Partisi", founded: 2012, ideologies: ["İslamcılık"], status: "Aktif" },
-    { name: "Türkiye İşçi Partisi", founded: 2012, ideologies: ["Sosyalizm"], status: "Aktif" },
-    { name: "Millet Partisi", founded: 1984, ideologies: ["Milliyetçilik"], status: "Aktif" }
-  ];
+      const parties = [
+        { name: "Cumhuriyet Halk Partisi", founded: 1923, ideologies: ["Sosyal Demokrasi", "Kemalizm"], status: "Aktif" },
+        { name: "Adalet ve Kalkınma Partisi", founded: 2001, ideologies: ["Muhafazakarlık"], status: "Aktif" },
+        { name: "Milliyetçi Hareket Partisi", founded: 1969, ideologies: ["Türk milliyetçiliği", "Milliyetçilik"], status: "Aktif" },
+        { name: "Demokrat Parti", founded: 1983, ideologies: ["Liberal muhafazakârlık"], status: "Aktif" },
+        { name: "Vatan Partisi", founded: 1992, ideologies: ["Ulusalcılık"], status: "Aktif" },
+        { name: "Genç Parti", founded: 1992, ideologies: ["Liberalizm"], status: "Aktif" },
+        { name: "Türkiye Sosyalist İşçi Partisi", founded: 1993, ideologies: ["Sol", "Komünizm", "Sosyalizm"], status: "Aktif" },
+        { name: "Büyük Birlik Partisi", founded: 1993, ideologies: ["Milliyetçilik", "Muhafazakarlık"], status: "Aktif" },
+        { name: "Türkiye Komünist Partisi", founded: 1993, ideologies: ["Sol", "Komünizm"], status: "Aktif" },
+        { name: "Sol Parti", founded: 1994, ideologies: ["Sol", "Sosyal Demokrasi"], status: "Aktif" },
+        { name: "Liberal Demokrat Parti", founded: 1994, ideologies: ["Liberalizm"], status: "Aktif" },
+        { name: "Emek Partisi", founded: 1996, ideologies: ["Sol"], status: "Aktif" },
+        { name: "Devrimci Sosyalist İşçi Partisi", founded: 1997, ideologies: ["Sol", "Sosyalizm", "Komünizm"], status: "Aktif" },
+        { name: "Saadet Partisi", founded: 2001, ideologies: ["Muhafazakarlık", "İslamcılık"], status: "Aktif" },
+        { name: "Bağımsız Türkiye Partisi", founded: 2001, ideologies: ["Muhafazakarlık"], status: "Aktif" },
+        { name: "Demokratik Sol Parti", founded: 1985, ideologies: ["Sol", "Sosyal Demokrasi"], status: "Aktif" },
+        { name: "İyi Parti", founded: 2017, ideologies: ["Türk Milliyetçiliği"], status: "Aktif" },
+        { name: "Hür Dava Partisi", founded: 2012, ideologies: ["İslamcılık"], status: "Aktif" },
+        { name: "Yeniden Refah Partisi", founded: 2012, ideologies: ["İslamcılık"], status: "Aktif" },
+        { name: "Türkiye İşçi Partisi", founded: 2012, ideologies: ["Sosyalizm"], status: "Aktif" },
+        { name: "Millet Partisi", founded: 1984, ideologies: ["Milliyetçilik"], status: "Aktif" }
+      ];
 
-  const container = document.getElementById("parties");
-  const resetBtn = document.getElementById("reset");
-  const downloadBtn = document.getElementById("download");
+      const container = document.getElementById("parties");
+      const resetBtn = document.getElementById("reset");
+      const downloadBtn = document.getElementById("download");
+      const gotoElectionsBtn = document.getElementById("gotoElections");
 
-  function render(list) {
-    container.innerHTML = "";
-    list.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "party";
-      div.innerHTML = `
-        <strong>${p.name}</strong><br>
-        <small>Kuruluş: ${p.founded}</small><br>
-        <small>
-          İdeoloji:
-          ${p.ideologies.map(i =>
-            `<a href="#" class="ideology" data-ideology="${i}">${i}</a>`
-          ).join(", ")}
-        </small><br>
-        <small>Durum: ${p.status}</small>
-      `;
-      container.appendChild(div);
+      // İstatistikleri güncelle
+      function updateStats() {
+        document.getElementById("totalParties").textContent = parties.length;
+        document.getElementById("activeParties").textContent = parties.filter(p => p.status === "Aktif").length;
+        document.getElementById("oldestYear").textContent = Math.min(...parties.map(p => p.founded));
+      }
+
+      function render(list) {
+        container.innerHTML = "";
+        
+        if (list.length === 0) {
+          container.innerHTML = '<div style="text-align:center; padding:40px; color:#999;">Hiç parti bulunamadı</div>';
+          return;
+        }
+        
+        list.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "party";
+          div.innerHTML = `
+            <strong>${p.name}</strong>
+            <small>📅 Kuruluş: ${p.founded}</small>
+            <small>
+              🏛️ İdeoloji:
+              ${p.ideologies.map(i =>
+                `<a href="#" class="ideology" data-ideology="${i}">${i}</a>`
+              ).join(", ")}
+            </small>
+            <small>✓ Durum: ${p.status}</small>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      // İlk yükleme
+      updateStats();
+      render(parties);
+
+      // İdeolojiye tıklayınca filtrele
+      container.addEventListener("click", e => {
+        if (e.target.classList.contains("ideology")) {
+          e.preventDefault();
+          const ideology = e.target.dataset.ideology;
+          const filtered = parties.filter(p => p.ideologies.includes(ideology));
+          render(filtered);
+        }
+      });
+
+      // Tüm partilere dön
+      resetBtn.addEventListener("click", () => render(parties));
+
+      // CSV / Excel İndir
+      downloadBtn.addEventListener("click", () => {
+        const rows = [
+          ["Parti Adı", "Kuruluş Yılı", "İdeolojiler", "Durum"], 
+          ...parties.map(p => [
+            p.name,
+            p.founded,
+            p.ideologies.join("; "),
+            p.status
+          ])
+        ];
+        const csv = rows.map(r => r.map(cell => `"${cell}"`).join(",")).join("\n");
+        const blob = new Blob(["\ufeff" + csv], {type: "text/csv;charset=utf-8;"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "bookraf_partiler.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // Seçimler sayfasına yönlendirme
+      gotoElectionsBtn.addEventListener("click", () => {
+        window.location.href = "elections.html";
+      });
+
+      // Grafik: Kuruluş yılına göre parti sayısı
+      function renderChart() {
+        const counts = {};
+        parties.forEach(p => {
+          counts[p.founded] = (counts[p.founded] || 0) + 1;
+        });
+        
+        const sortedYears = Object.keys(counts).sort((a, b) => a - b);
+        const sortedCounts = sortedYears.map(year => counts[year]);
+        
+        const ctx = document.getElementById("partyChart").getContext("2d");
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: sortedYears,
+            datasets: [{
+              label: 'Kurulan Parti Sayısı',
+              data: sortedCounts,
+              backgroundColor: 'rgba(102, 126, 234, 0.8)',
+              borderColor: 'rgba(102, 126, 234, 1)',
+              borderWidth: 2,
+              borderRadius: 8
+            }]
+          },
+          options: { 
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top'
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0,0,0,0.8)',
+                padding: 12,
+                cornerRadius: 8
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  stepSize: 1
+                },
+                grid: {
+                  color: 'rgba(0,0,0,0.05)'
+                }
+              },
+              x: {
+                grid: {
+                  display: false
+                }
+              }
+            }
+          }
+        });
+      }
+
+      renderChart();
+
     });
-  }
-
-  // İlk yükleme
-  render(parties);
-
-  // Ideolojiye tıklayınca filtrele
-  container.addEventListener("click", e => {
-    if (e.target.classList.contains("ideology")) {
-      e.preventDefault();
-      const ideology = e.target.dataset.ideology;
-      const filtered = parties.filter(p => p.ideologies.includes(ideology));
-      render(filtered);
-    }
-  });
-
-  // Tüm partilere dön
-  resetBtn.addEventListener("click", () => render(parties));
-
-  // CSV / Excel İndir
-  downloadBtn.addEventListener("click", () => {
-    const rows = [["Name","Founded","Ideologies","Status"], 
-      ...parties.map(p => [p.name,p.founded,p.ideologies.join("; "),p.status])
-    ];
-    const csv = rows.map(r => r.join(",")).join("\n");
-    const blob = new Blob([csv], {type:"text/csv"});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "bookraf_parties.csv";
-    a.click();
-  });
-
-  // Grafik: Kuruluş yılına göre parti sayısı
-  function renderChart() {
-    const counts = {};
-    parties.forEach(p => counts[p.founded] = (counts[p.founded]||0)+1);
-    const ctx = document.getElementById("partyChart").getContext("2d");
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: Object.keys(counts),
-        datasets: [{
-          label: 'Kurulan Parti Sayısı',
-          data: Object.values(counts),
-          backgroundColor: 'rgba(0,102,204,0.6)'
-        }]
-      },
-      options: { responsive:true }
-    });
-  }
-
-  renderChart();
-
-});
-</script>
-  // Seçimler sayfasına yönlendirme
-  document.getElementById("gotoElections").addEventListener("click", () => {
-    window.location.href = "elections.html";
-  });
-</script>
+  </script>
 </body>
 </html>
