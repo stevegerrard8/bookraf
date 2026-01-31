@@ -17,6 +17,13 @@ const parties = [
     ideology: "Türk milliyetçiliği",
     status: "Aktif"
   }
+  {
+  name: "Demokrat Parti",
+  founded: 1983,
+  ideology: "İDEOLOJİ",
+  status: "Aktif"
+},
+
 ];
 
 const container = document.getElementById("parties");
