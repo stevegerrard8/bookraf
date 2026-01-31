@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     { year: 2023, party: "Cumhuriyet Halk Partisi", votes: 37.5, ballots: 850000, province: "İstanbul", provinceId: 34 },
     { year: 2023, party: "Adalet ve Kalkınma Partisi", votes: 35.2, ballots: 780000, province: "İstanbul", provinceId: 34 },
     { year: 2023, party: "Milliyetçi Hareket Partisi", votes: 12.3, ballots: 270000, province: "İstanbul", provinceId: 34 },
+    { year: 1995, party: "Cumhuriyet Halk Partisi", votes: 37.5, ballots: 850000, province: "İstanbul", provinceId: 34 },
+    { year: 1995, party: "Adalet ve Kalkınma Partisi", votes: 35.2, ballots: 780000, province: "İstanbul", provinceId: 34 },
+    { year: 1995, party: "Milliyetçi Hareket Partisi", votes: 12.3, ballots: 270000, province: "İstanbul", provinceId: 34 },
     
     // Ankara (6)
     { year: 2023, party: "Cumhuriyet Halk Partisi", votes: 42.1, ballots: 520000, province: "Ankara", provinceId: 6 },
