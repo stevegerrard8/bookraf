@@ -16,7 +16,7 @@ const parties = [
     founded: 1969,
     ideology: "Türk milliyetçiliği",
     status: "Aktif"
-  }
+  },
   {
   name: "Demokrat Parti",
   founded: 1983,
