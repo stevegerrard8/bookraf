@@ -10,70 +10,68 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Adalet ve Kalkınma Partisi",
       founded: 2001,
-      ideology: "Muhafazakâr demokrasi",
+      ideologies: ["Muhafazakâr demokrasi"],
       status: "Aktif"
     },
     {
       name: "Milliyetçi Hareket Partisi",
       founded: 1969,
-      ideology: "Türk milliyetçiliği",
+      ideologies: ["Türk milliyetçiliği"],
       status: "Aktif"
     },
     {
       name: "Demokrat Parti",
       founded: 1983,
-      ideology: "Liberal muhafazakârlık",
+      ideologies: ["Liberal muhafazakârlık"],
       status: "Aktif"
     },
     {
       name: "Millet Partisi",
       founded: 1984,
-      ideology: "Milliyetçilik",
+      ideologies: ["Milliyetçilik"],
       status: "Aktif"
     }
   ];
 
   const container = document.getElementById("parties");
 
-  function renderParties(list) {
+  function render(list) {
     container.innerHTML = "";
 
-    list.forEach(party => {
+    list.forEach(p => {
       const div = document.createElement("div");
       div.className = "party";
 
-      const ideologyHTML = party.ideologies
-        ? party.ideologies
-            .map(i => `<a href="#" class="ideology" data-ideology="${i}">${i}</a>`)
-            .join(", ")
-        : party.ideology;
-
       div.innerHTML = `
-        <strong>${party.name}</strong><br>
-        <small>Kuruluş: ${party.founded}</small><br>
-        <small>İdeoloji: ${ideologyHTML}</small><br>
-        <small>Durum: ${party.status}</small>
+        <strong>${p.name}</strong><br>
+        <small>Kuruluş: ${p.founded}</small><br>
+        <small>
+          İdeoloji:
+          ${p.ideologies.map(i =>
+            `<a href="#" class="ideology" data-ideology="${i}">${i}</a>`
+          ).join(", ")}
+        </small><br>
+        <small>Durum: ${p.status}</small>
       `;
 
       container.appendChild(div);
     });
   }
 
-  // İLK YÜKLEME
-  renderParties(parties);
+  // İlk yükleme
+  render(parties);
 
-  // IDEOLOJİ TIKLAMA
-  container.addEventListener("click", (e) => {
+  // Filtreleme
+  container.addEventListener("click", e => {
     if (e.target.classList.contains("ideology")) {
       e.preventDefault();
 
-      const selectedIdeology = e.target.dataset.ideology;
-
+      const ideology = e.target.dataset.ideology;
       const filtered = parties.filter(p =>
-        p.ideologies && p.ideologies.includes(selectedIdeology)
+        p.ideologies.includes(ideology)
       );
 
-      renderParties(filtered);
+      render(filtered);
     }
   });
 
