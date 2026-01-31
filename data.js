@@ -24,6 +24,12 @@ const parties = [
     founded: 1983,
     ideology: "Liberal muhafazakârlık",
     status: "Aktif"
+  },
+  {
+    name: "Millet Partisi",
+    founded: 1984,
+    ideology: "Milliyetçilik",
+    status: "Aktif"
   }
 ];
 
