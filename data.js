@@ -10,13 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Adalet ve Kalkınma Partisi",
       founded: 2001,
-      ideologies: ["Muhafazakâr demokrasi"],
+      ideologies: ["Muhafazakarlık"],
       status: "Aktif"
     },
     {
       name: "Milliyetçi Hareket Partisi",
       founded: 1969,
-      ideologies: ["Türk milliyetçiliği"],
+      ideologies: ["Türk milliyetçiliği", "Milliyetçilik"],
       status: "Aktif"
     },
     {
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
      {
       name: "Büyük Birlik Partisi",
       founded: 1993,
-      ideologies: ["Milliyeçilik", "Muhafazakarlık"],
+      ideologies: ["Milliyetçilik", "Muhafazakarlık"],
       status: "Aktif"
     },
      {
@@ -65,6 +65,36 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Liberal Demokrat Parti",
       founded: 1994,
       ideologies: ["Liberalizm"],
+      status: "Aktif"
+    },
+     {
+      name: "Emek Partisi",
+      founded: 1996,
+      ideologies: ["Sol"],
+      status: "Aktif"
+    },
+     {
+      name: "Devrimci Sosyalist İşçi Partisi",
+      founded: 1997,
+      ideologies: ["Sol", "Sosyalizm", "Komünizm"],
+      status: "Aktif"
+    },
+     {
+      name: "Saadet Partisi",
+      founded: 2001,
+      ideologies: ["Muhafazakarlık", "İslamcılık"],
+      status: "Aktif"
+    },
+     {
+      name: "Bağımsız Türkiye Partisi",
+      founded: 2001,
+      ideologies: ["Muhafazkarlık"],
+      status: "Aktif"
+    },
+     {
+      name: "Demokratik Sol Parti",
+      founded: 1985,
+      ideologies: ["Sol", "Sosyal Demokrasi"],
       status: "Aktif"
     },
     {
