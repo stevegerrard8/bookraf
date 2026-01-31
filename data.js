@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const container = document.getElementById("parties");
+  const resetBtn = document.getElementById("reset");
 
   function render(list) {
     container.innerHTML = "";
@@ -61,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // İlk yükleme
   render(parties);
 
-  // Filtreleme
+  // İdeolojiye tıklayınca filtrele
   container.addEventListener("click", e => {
     if (e.target.classList.contains("ideology")) {
       e.preventDefault();
@@ -73,6 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       render(filtered);
     }
+  });
+
+  // Tüm partilere dön
+  resetBtn.addEventListener("click", () => {
+    render(parties);
   });
 
 });
