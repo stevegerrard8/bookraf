@@ -26,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
       status: "Aktif"
     },
     {
-      name: "Serhat UYAR",
-      founded: 1983,
-      ideologies: ["Liberal muhafazakârlık"],
+      name: "Demokratik Sol Parti",
+      founded: 1985,
+      ideologies: ["Sol", "Sosyal Demokrasi"],
       status: "Aktif"
     },
     {
