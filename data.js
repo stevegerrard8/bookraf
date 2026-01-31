@@ -88,13 +88,37 @@ document.addEventListener("DOMContentLoaded", () => {
      {
       name: "Bağımsız Türkiye Partisi",
       founded: 2001,
-      ideologies: ["Muhafazkarlık"],
+      ideologies: ["Muhafazakarlık"],
       status: "Aktif"
     },
      {
       name: "Demokratik Sol Parti",
       founded: 1985,
       ideologies: ["Sol", "Sosyal Demokrasi"],
+      status: "Aktif"
+    },
+    {
+      name: "İyi Parti",
+      founded: 2017,
+      ideologies: ["Türk Milliyetçiliği"],
+      status: "Aktif"
+    },
+      {
+      name: "Hür Dava Partisi",
+      founded: 2012,
+      ideologies: ["İslamcılık"],
+      status: "Aktif"
+    },
+      {
+      name: "Yeniden Refah Partisi",
+      founded: 2012,
+      ideologies: ["İslamcılık"],
+      status: "Aktif"
+    },
+      {
+      name: "Türkiye İşçi Partisi",
+      founded: 2012,
+      ideologies: ["Sosyalizm"],
       status: "Aktif"
     },
     {
