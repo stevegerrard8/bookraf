@@ -26,6 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
       status: "Aktif"
     },
     {
+      name: "Serhat UYAR",
+      founded: 1983,
+      ideologies: ["Liberal muhafazakârlık"],
+      status: "Aktif"
+    },
+    {
       name: "Millet Partisi",
       founded: 1984,
       ideologies: ["Milliyetçilik"],
