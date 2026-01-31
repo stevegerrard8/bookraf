@@ -25,6 +25,7 @@
 <div id="controls">
   <button id="reset">Tüm partiler</button>
   <button id="download">Excel / CSV İndir</button>
+  <button id="gotoElections">Seçim Sonuçları</button>
 </div>
 
 <div id="parties"></div>
@@ -135,6 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
-
+  // Seçimler sayfasına yönlendirme
+  document.getElementById("gotoElections").addEventListener("click", () => {
+    window.location.href = "elections.html";
+  });
+</script>
 </body>
 </html>
