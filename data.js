@@ -26,9 +26,45 @@ document.addEventListener("DOMContentLoaded", () => {
       status: "Aktif"
     },
     {
-      name: "Demokratik Sol Parti",
-      founded: 1985,
+      name: "Vatan Partisi",
+      founded: 1992,
+      ideologies: ["Ulusalcılık"],
+      status: "Aktif"
+    },
+     {
+      name: "Genç Parti",
+      founded: 1992,
+      ideologies: ["Liberalizm"],
+      status: "Aktif"
+    },
+     {
+      name: "Türkiye Sosyalist İşçi Partisi",
+      founded: 1993,
+      ideologies: ["Sol", "Komünizm", "Sosyalizm"],
+      status: "Aktif"
+    },
+     {
+      name: "Büyük Birlik Partisi",
+      founded: 1993,
+      ideologies: ["Milliyeçilik", "Muhafazakarlık"],
+      status: "Aktif"
+    },
+     {
+      name: "Türkiye Komünist Partisi",
+      founded: 1993,
+      ideologies: ["Sol", "Komünizm"],
+      status: "Aktif"
+    },
+     {
+      name: "Sol Parti",
+      founded: 1994,
       ideologies: ["Sol", "Sosyal Demokrasi"],
+      status: "Aktif"
+    },
+     {
+      name: "Liberal Demokrat Parti",
+      founded: 1994,
+      ideologies: ["Liberalizm"],
       status: "Aktif"
     },
     {
