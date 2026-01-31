@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 const parties = [
   {
     name: "Cumhuriyet Halk Partisi",
@@ -18,15 +20,16 @@ const parties = [
     status: "Aktif"
   },
   {
-  name: "Demokrat Parti",
-  founded: 1983,
-  ideology: "İDEOLOJİ",
-  status: "Aktif"
-}
-
+    name: "Demokrat Parti",
+    founded: 1983,
+    ideology: "Liberal muhafazakârlık",
+    status: "Aktif"
+  }
 ];
 
 const container = document.getElementById("parties");
+
+console.log("Container:", container); // 🔍 TEST
 
 parties.forEach(party => {
   const div = document.createElement("div");
@@ -38,4 +41,6 @@ parties.forEach(party => {
     <small>Durum: ${party.status}</small>
   `;
   container.appendChild(div);
+});
+
 });
