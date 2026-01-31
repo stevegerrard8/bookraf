@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     {
       name: "Cumhuriyet Halk Partisi",
       founded: 1923,
-      ideologies: ["Sosyal demokrasi", "Kemalizm"],
+      ideologies: ["Sosyal Demokrasi", "Kemalizm"],
       status: "Aktif"
     },
     {
