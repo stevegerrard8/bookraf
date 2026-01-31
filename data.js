@@ -22,7 +22,7 @@ const parties = [
   founded: 1983,
   ideology: "İDEOLOJİ",
   status: "Aktif"
-},
+}
 
 ];
 
