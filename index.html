@@ -201,6 +201,7 @@
       <button id="reset">🔄 Tüm Partiler</button>
       <button id="download">📥 Excel / CSV İndir</button>
       <button id="gotoElections">🗺️ Seçim Sonuçları Haritası</button>
+      <button id="gotoEconomy">📊 Ekonomi Verileri</button>
     </div>
 
     <div class="content">
@@ -336,6 +337,12 @@
       // Seçimler sayfasına yönlendirme
       gotoElectionsBtn.addEventListener("click", () => {
         window.location.href = "elections.html";
+      });
+
+      // Ekonomi sayfasına yönlendirme
+      const gotoEconomyBtn = document.getElementById("gotoEconomy");
+      gotoEconomyBtn.addEventListener("click", () => {
+        window.location.href = "economy.html";
       });
 
       // Grafik: Kuruluş yılına göre parti sayısı
