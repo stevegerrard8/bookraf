@@ -202,6 +202,7 @@
       <button id="download">📥 Excel / CSV İndir</button>
       <button id="gotoElections">🗺️ Seçim Sonuçları Haritası</button>
       <button id="gotoEconomy">📊 Ekonomi Verileri</button>
+      <button id="gotoAbout">ℹ️ Hakkımızda</button>
     </div>
 
     <div class="content">
@@ -343,6 +344,12 @@
       const gotoEconomyBtn = document.getElementById("gotoEconomy");
       gotoEconomyBtn.addEventListener("click", () => {
         window.location.href = "economy.html";
+      });
+
+      // Hakkımızda sayfasına yönlendirme
+      const gotoAboutBtn = document.getElementById("gotoAbout");
+      gotoAboutBtn.addEventListener("click", () => {
+        window.location.href = "about.html";
       });
 
       // Grafik: Kuruluş yılına göre parti sayısı
