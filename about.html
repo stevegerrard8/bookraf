@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bookraf – Hakkımızda</title>
+  <meta name="description" content="bookraf - Sosyal Bilimler Araştırma Veritabanı hakkında bilgi.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .back-button {
+      position: absolute;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-50%) translateX(-3px);
+    }
+    
+    h1 { 
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+    
+    .content {
+      padding: 60px 80px;
+    }
+    
+    .logo-section {
+      text-align: center;
+      margin-bottom: 50px;
+      padding: 40px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 16px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-placeholder {
+      background: white;
+      width: 200px;
+      height: 200px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4em;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      border: 3px dashed #ddd;
+      color: #999;
+    }
+    
+    .logo-placeholder img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 16px;
+    }
+    
+    .intro-section {
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      border: 2px solid #e0e0e0;
+      margin-bottom: 30px;
+    }
+    
+    .intro-section h2 {
+      color: #1e3c72;
+      margin-bottom: 20px;
+      font-size: 2em;
+      text-align: center;
+    }
+    
+    .intro-text {
+      line-height: 1.8;
+      color: #333;
+      font-size: 1.1em;
+      text-align: justify;
+      margin-bottom: 20px;
+    }
+    
+    .intro-text p {
+      margin-bottom: 20px;
+    }
+    
+    .intro-text p:last-child {
+      margin-bottom: 0;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+      margin-top: 40px;
+    }
+    
+    .feature-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: #667eea;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    }
+    
+    .feature-icon {
+      font-size: 3em;
+      margin-bottom: 15px;
+    }
+    
+    .feature-card h3 {
+      color: #1e3c72;
+      margin-bottom: 10px;
+      font-size: 1.2em;
+    }
+    
+    .feature-card p {
+      color: #666;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+    
+    .mission-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 16px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    
+    .mission-section h2 {
+      margin-bottom: 20px;
+      font-size: 1.8em;
+    }
+    
+    .mission-section p {
+      font-size: 1.1em;
+      line-height: 1.8;
+      opacity: 0.95;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    
+    .cta-button {
+      padding: 15px 35px;
+      background: white;
+      color: #667eea;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .cta-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+    
+    .cta-button.secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+    
+    .cta-button.secondary:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    @media (max-width: 768px) {
+      .back-button {
+        position: static;
+        transform: none;
+        margin-bottom: 20px;
+      }
+      
+      header {
+        padding: 30px 20px;
+      }
+      
+      .content {
+        padding: 40px 30px;
+      }
+      
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="index.html" class="back-button">
+        ← Ana Sayfa
+      </a>
+      <h1>📚 bookraf</h1>
+      <div class="subtitle">Hakkımızda</div>
+    </header>
+    
+    <div class="content">
+      <!-- Logo Bölümü -->
+      <div class="logo-section">
+        <div class="logo-placeholder" id="logoContainer">
+          📚
+          <!-- Buraya logo eklenecek -->
+          <!-- <img src="logo.png" alt="bookraf Logo"> -->
+        </div>
+      </div>
+      
+      <!-- Tanıtım Yazısı Bölümü -->
+      <div class="intro-section">
+        <h2>bookraf Nedir?</h2>
+        <div class="intro-text" id="introText">
+          <p>
+            <strong>bookraf</strong>, Türkiye'deki siyasi partiler, seçim sonuçları ve ekonomik veriler hakkında doğrulanmış, kaynaklı ve akademik bir araştırma veritabanıdır.
+          </p>
+          <p>
+            Amacımız, sosyal bilimler alanında çalışan araştırmacılar, öğrenciler ve ilgilenen herkes için güvenilir, kolay erişilebilir ve güncel bir veri kaynağı sunmaktır.
+          </p>
+          <p>
+            Platformumuz, karmaşık siyasi ve ekonomik verileri anlaşılır görselleştirmeler ve interaktif araçlarla kullanıcılarımıza sunar. Verilerimiz sürekli güncellenir ve akademik standartlara uygun olarak sunulur.
+          </p>
+        </div>
+      </div>
+      
+      <!-- Özellikler -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🏛️</div>
+          <h3>Parti Veritabanı</h3>
+          <p>Türkiye'deki aktif siyasi partilerin detaylı bilgileri, ideolojileri ve kuruluş tarihleri</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h3>Seçim Haritaları</h3>
+          <p>İl bazlı seçim sonuçlarının interaktif harita görselleştirmesi</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Ekonomi Verileri</h3>
+          <p>Enflasyon, faiz ve diğer ekonomik göstergelerin zaman serisi analizleri</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📈</div>
+          <h3>Veri Analizi</h3>
+          <p>Karşılaştırmalı analizler ve trend grafikleri</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Filtreleme</h3>
+          <p>Gelişmiş filtreleme seçenekleri ile istediğiniz veriye hızlı erişim</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">💾</div>
+          <h3>Veri İndirme</h3>
+          <p>Excel ve CSV formatında veri dışa aktarma imkanı</p>
+        </div>
+      </div>
+      
+      <!-- Misyon -->
+      <div class="mission-section">
+        <h2>Misyonumuz</h2>
+        <p>
+          Türkiye'deki sosyal bilimler araştırmalarına katkıda bulunmak, 
+          veriye dayalı analizleri desteklemek ve akademik çalışmalara 
+          güvenilir bir kaynak olmak.
+        </p>
+        
+        <div class="cta-buttons">
+          <a href="index.html" class="cta-button">Veritabanını Keşfet</a>
+          <a href="elections.html" class="cta-button secondary">Seçim Haritaları</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Logo yükleme işlevi (ileride kullanılabilir)
+    // Şimdilik placeholder gösteriliyor
+    
+    // Intro text'i düzenlemek isterseniz:
+    // document.getElementById('introText').innerHTML = 'Yeni yazınız...';
+  </script>
+</body>
+</html>
