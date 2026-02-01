@@ -202,6 +202,7 @@
       <button id="download">📥 Excel / CSV İndir</button>
       <button id="gotoElections">🗺️ Seçim Sonuçları Haritası</button>
       <button id="gotoEconomy">📊 Ekonomi Verileri</button>
+      <button id="gotoBooks">📚 Kitap Veritabanı</button>
       <button id="gotoAbout">ℹ️ Hakkımızda</button>
     </div>
 
@@ -344,6 +345,12 @@
       const gotoEconomyBtn = document.getElementById("gotoEconomy");
       gotoEconomyBtn.addEventListener("click", () => {
         window.location.href = "economy.html";
+      });
+
+      // Kitaplar sayfasına yönlendirme
+      const gotoBooksBtn = document.getElementById("gotoBooks");
+      gotoBooksBtn.addEventListener("click", () => {
+        window.location.href = "books.html";
       });
 
       // Hakkımızda sayfasına yönlendirme
