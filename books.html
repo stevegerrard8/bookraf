@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bookraf – Kitap Veritabanı</title>
+  <meta name="description" content="Sosyal bilimler alanında akademik kitap veritabanı.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .back-button {
+      position: absolute;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-50%) translateX(-3px);
+    }
+    
+    h1 { 
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+    
+    .content {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 30px;
+      padding: 40px;
+      min-height: 600px;
+    }
+    
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .filter-section h3 {
+      margin-bottom: 20px;
+      color: #1e3c72;
+      font-size: 1.3em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .search-box {
+      margin-bottom: 25px;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 14px 20px 14px 45px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s;
+      background: white url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23999" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>') no-repeat 15px center;
+    }
+    
+    .search-box input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .filter-group {
+      margin-bottom: 20px;
+    }
+    
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    .filter-group label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    
+    select, input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+      background: white;
+    }
+    
+    select:hover, input[type="number"]:hover {
+      border-color: #667eea;
+    }
+    
+    select:focus, input[type="number"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .year-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    .year-inputs input {
+      width: 100%;
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px 24px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .info-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      text-align: center;
+    }
+    
+    .info-box .count {
+      font-size: 3em;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .info-box .label {
+      opacity: 0.9;
+      font-size: 0.95em;
+    }
+    
+    .books-container {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .books-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .books-header h2 {
+      color: #1e3c72;
+      font-size: 1.5em;
+    }
+    
+    .sort-select {
+      padding: 8px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      background: white;
+    }
+    
+    .books-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .book-card {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 20px;
+      padding: 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    
+    .book-card:hover {
+      border-color: #667eea;
+      transform: translateX(5px);
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+    }
+    
+    .book-cover {
+      width: 120px;
+      height: 170px;
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3em;
+      color: #999;
+      border: 2px solid #ddd;
+    }
+    
+    .book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    
+    .book-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .book-title {
+      font-size: 1.3em;
+      font-weight: 700;
+      color: #1e3c72;
+      margin-bottom: 5px;
+    }
+    
+    .book-author {
+      font-size: 1.05em;
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .book-meta {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    
+    .book-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9em;
+      color: #666;
+    }
+    
+    .book-meta span strong {
+      color: #333;
+    }
+    
+    .book-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    
+    .tag {
+      padding: 5px 12px;
+      background: #f0f4ff;
+      color: #667eea;
+      border-radius: 6px;
+      font-size: 0.85em;
+      font-weight: 500;
+    }
+    
+    .book-description {
+      margin-top: 10px;
+      color: #666;
+      line-height: 1.6;
+      font-size: 0.95em;
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+    
+    .no-results-icon {
+      font-size: 4em;
+      margin-bottom: 20px;
+    }
+    
+    .no-results-text {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    
+    @media (max-width: 1200px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .back-button {
+        position: static;
+        transform: none;
+        margin-bottom: 20px;
+      }
+      
+      header {
+        padding: 30px 20px;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .book-card {
+        grid-template-columns: 1fr;
+      }
+      
+      .book-cover {
+        width: 100%;
+        height: 200px;
+      }
+      
+      .books-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="index.html" class="back-button">
+        ← Ana Sayfa
+      </a>
+      <h1>📚 bookraf</h1>
+      <div class="subtitle">Sosyal Bilimler Kitap Veritabanı</div>
+    </header>
+    
+    <div class="content">
+      <div class="left-panel">
+        <div class="filter-section">
+          <h3>🔍 Arama & Filtreler</h3>
+          
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Kitap adı, yazar, konu ara...">
+          </div>
+          
+          <div class="filter-group">
+            <label for="publisherFilter">📖 Yayınevi</label>
+            <select id="publisherFilter">
+              <option value="">Tümü</option>
+              <option value="İletişim">İletişim Yayınları</option>
+              <option value="Metis">Metis Yayınları</option>
+              <option value="Doğan">Doğan Kitap</option>
+              <option value="İş Bankası">İş Bankası Kültür Yayınları</option>
+              <option value="Can">Can Yayınları</option>
+              <option value="YKY">Yapı Kredi Yayınları</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="topicFilter">🏷️ Konu</label>
+            <select id="topicFilter">
+              <option value="">Tümü</option>
+              <option value="Siyaset Bilimi">Siyaset Bilimi</option>
+              <option value="Sosyoloji">Sosyoloji</option>
+              <option value="Ekonomi">Ekonomi</option>
+              <option value="Tarih">Tarih</option>
+              <option value="Psikoloji">Psikoloji</option>
+              <option value="Felsefe">Felsefe</option>
+              <option value="Antropoloji">Antropoloji</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label>📅 Basım Yılı Aralığı</label>
+            <div class="year-inputs">
+              <input type="number" id="yearFrom" placeholder="Başlangıç" min="1900" max="2024">
+              <input type="number" id="yearTo" placeholder="Bitiş" min="1900" max="2024">
+            </div>
+          </div>
+          
+          <div class="filter-group">
+            <label for="authorFilter">✍️ Yazar</label>
+            <select id="authorFilter">
+              <option value="">Tümü</option>
+              <option value="Şerif Mardin">Şerif Mardin</option>
+              <option value="İlber Ortaylı">İlber Ortaylı</option>
+              <option value="Nilüfer Göle">Nilüfer Göle</option>
+              <option value="Ahmet Hamdi Tanpınar">Ahmet Hamdi Tanpınar</option>
+              <option value="Cemil Meriç">Cemil Meriç</option>
+            </select>
+          </div>
+          
+          <button id="resetBtn">🔄 Filtreleri Sıfırla</button>
+        </div>
+        
+        <div class="info-box">
+          <div class="count" id="bookCount">0</div>
+          <div class="label">Kitap Bulundu</div>
+        </div>
+      </div>
+      
+      <div class="books-container">
+        <div class="books-header">
+          <h2>📚 Kitap Listesi</h2>
+          <select class="sort-select" id="sortSelect">
+            <option value="title">Alfabetik (A-Z)</option>
+            <option value="year-desc">Yıla Göre (Yeni-Eski)</option>
+            <option value="year-asc">Yıla Göre (Eski-Yeni)</option>
+            <option value="author">Yazara Göre</option>
+          </select>
+        </div>
+        
+        <div class="books-list" id="booksList">
+          <!-- Kitaplar buraya dinamik olarak eklenecek -->
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="books.js"></script>
+</body>
+</html>
