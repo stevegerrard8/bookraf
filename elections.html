@@ -21,7 +21,7 @@
     }
     
     .container {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
       background: white;
       border-radius: 20px;
@@ -136,7 +136,16 @@
     }
     
     .content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
       padding: 40px;
+    }
+    
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
     }
     
     .info-box {
@@ -144,7 +153,6 @@
       color: white;
       padding: 20px 30px;
       border-radius: 12px;
-      margin-bottom: 30px;
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
     
@@ -156,48 +164,107 @@
     .info-box p {
       opacity: 0.95;
       line-height: 1.6;
+      font-size: 0.95em;
     }
     
-    table { 
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 30px;
+    .party-summary {
       background: white;
-      border-radius: 10px;
-      overflow: hidden;
+      border-radius: 12px;
+      padding: 25px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     
-    th, td { 
+    .party-summary h3 {
+      margin-bottom: 20px;
+      color: #1e3c72;
+      font-size: 1.3em;
+    }
+    
+    .party-item {
+      display: flex;
+      align-items: center;
       padding: 15px;
-      text-align: left;
-      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: 2px solid transparent;
     }
     
-    th { 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 0.9em;
-      letter-spacing: 0.5px;
-    }
-    
-    tbody tr {
-      transition: background 0.2s;
-    }
-    
-    tbody tr:hover {
+    .party-item:hover {
       background: #f8f9fa;
+      transform: translateX(5px);
+    }
+    
+    .party-item.active {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+    
+    .party-color {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+    
+    .party-info {
+      flex-grow: 1;
+    }
+    
+    .party-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95em;
+      margin-bottom: 3px;
+    }
+    
+    .party-votes {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #667eea;
+    }
+    
+    .province-details {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .province-details h3 {
+      margin-bottom: 15px;
+      color: #1e3c72;
+      font-size: 1.2em;
+      position: sticky;
+      top: 0;
+      background: white;
+      padding-bottom: 10px;
+      z-index: 10;
+    }
+    
+    .province-result {
+      padding: 12px;
+      margin-bottom: 8px;
+      border-left: 4px solid #667eea;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+    .province-result strong {
+      color: #1e3c72;
     }
     
     #map { 
       width: 100%;
-      height: 700px;
-      margin-top: 40px;
+      height: 800px;
       border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      background: white;
     }
     
     .loading {
@@ -214,6 +281,12 @@
       padding: 20px;
       border-radius: 10px;
       margin: 20px 0;
+    }
+    
+    @media (max-width: 1200px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
     }
     
     @media (max-width: 768px) {
@@ -235,6 +308,25 @@
         padding: 20px;
       }
     }
+    
+    /* Scrollbar styling */
+    .province-details::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .province-details::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .province-details::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+    
+    .province-details::-webkit-scrollbar-thumb:hover {
+      background: #5568d3;
+    }
   </style>
 </head>
 <body>
@@ -244,7 +336,7 @@
         ← Ana Sayfa
       </button>
       <h1>🗺️ bookraf</h1>
-      <div class="subtitle">Türkiye Seçim Sonuçları Harita Görünümü</div>
+      <div class="subtitle">Türkiye Seçim Sonuçları - İnteraktif Harita Görünümü</div>
     </header>
     
     <div class="controls">
@@ -254,29 +346,31 @@
           <option value="2023">2023</option>
           <option value="2018">2018</option>
           <option value="2015">2015</option>
-          <option value="1995">1995</option>
         </select>
       </div>
       <button id="reset">🔄 Tüm Sonuçları Göster</button>
     </div>
     
     <div class="content">
-      <div class="info-box">
-        <h3>ℹ️ Harita Hakkında</h3>
-        <p>Bu harita Türkiye'deki 81 ilin seçim sonuçlarını görselleştirir. Renk tonları oy oranlarını gösterir: <strong>açık renkler düşük</strong>, <strong>koyu renkler yüksek</strong> oy oranlarını temsil eder. İl üzerine gelerek detaylı bilgi görebilirsiniz.</p>
+      <div class="left-panel">
+        <div class="info-box">
+          <h3>ℹ️ Nasıl Kullanılır?</h3>
+          <p><strong>• Haritada</strong> her il kazanan partinin renginde görünür</p>
+          <p><strong>• İl üzerine gelin</strong> → Detaylı sonuçları görün</p>
+          <p><strong>• İle tıklayın</strong> → Altta o ilin tüm sonuçlarını göster</p>
+          <p><strong>• Partiye tıklayın</strong> → O partinin kazandığı illeri vurgula</p>
+        </div>
+        
+        <div class="party-summary">
+          <h3>🏛️ Parti Sonuçları</h3>
+          <div id="partySummary"></div>
+        </div>
+        
+        <div class="province-details">
+          <h3 id="provinceTitle">📍 İl Seçin</h3>
+          <div id="provinceResults">Haritadan bir ile tıklayın</div>
+        </div>
       </div>
-      
-      <table id="results">
-        <thead>
-          <tr>
-            <th>Parti</th>
-            <th>Oy Oranı (%)</th>
-            <th>Oy Sayısı</th>
-            <th>İl</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
       
       <div id="map"></div>
     </div>
