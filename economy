@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bookraf – Türkiye Ekonomi Verileri</title>
+  <meta name="description" content="Türkiye enflasyon ve faiz oranları verileri.">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+    
+    header {
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .back-button {
+      position: absolute;
+      left: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .back-button:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-50%) translateX(-3px);
+    }
+    
+    h1 { 
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+    
+    .content {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 30px;
+      padding: 40px;
+      min-height: 600px;
+    }
+    
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .filter-section h3 {
+      margin-bottom: 20px;
+      color: #1e3c72;
+      font-size: 1.3em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .filter-group {
+      margin-bottom: 20px;
+    }
+    
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+    
+    .filter-group label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+    
+    select, input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: all 0.3s;
+      background: white;
+    }
+    
+    select:hover, input:hover {
+      border-color: #667eea;
+    }
+    
+    select:focus, input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .checkbox-item:hover {
+      background: #f8f9fa;
+      border-color: #667eea;
+    }
+    
+    .checkbox-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #667eea;
+    }
+    
+    .checkbox-item label {
+      margin: 0;
+      cursor: pointer;
+      flex-grow: 1;
+      font-weight: 500;
+    }
+    
+    .indicator-color {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    
+    button {
+      width: 100%;
+      padding: 14px 24px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .info-box {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .info-box h4 {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+    
+    .info-box p {
+      opacity: 0.95;
+      line-height: 1.6;
+      font-size: 0.9em;
+    }
+    
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+    
+    .stat-card:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    }
+    
+    .stat-label {
+      font-size: 0.85em;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .stat-value {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #1e3c72;
+    }
+    
+    .stat-change {
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+    
+    .stat-change.positive {
+      color: #48BB78;
+    }
+    
+    .stat-change.negative {
+      color: #E53E3E;
+    }
+    
+    .chart-container {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .chart-header {
+      margin-bottom: 25px;
+    }
+    
+    .chart-header h2 {
+      color: #1e3c72;
+      font-size: 1.5em;
+      margin-bottom: 5px;
+    }
+    
+    .chart-header p {
+      color: #666;
+      font-size: 0.95em;
+    }
+    
+    canvas {
+      max-height: 500px;
+    }
+    
+    @media (max-width: 1200px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+      
+      .stats-cards {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .back-button {
+        position: static;
+        transform: none;
+        margin-bottom: 20px;
+      }
+      
+      header {
+        padding: 30px 20px;
+      }
+      
+      .content {
+        padding: 20px;
+      }
+      
+      .stats-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <button class="back-button" onclick="window.location.href='index.html'">
+        ← Ana Sayfa
+      </button>
+      <h1>📊 bookraf</h1>
+      <div class="subtitle">Türkiye Ekonomi Verileri - Enflasyon ve Faiz Analizi</div>
+    </header>
+    
+    <div class="content">
+      <div class="left-panel">
+        <div class="filter-section">
+          <h3>🔍 Filtreler</h3>
+          
+          <div class="filter-group">
+            <label for="periodFilter">Zaman Aralığı</label>
+            <select id="periodFilter">
+              <option value="all">Tüm Dönem</option>
+              <option value="12">Son 12 Ay</option>
+              <option value="24">Son 24 Ay</option>
+              <option value="36" selected>Son 36 Ay</option>
+              <option value="60">Son 5 Yıl</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label>Gösterilecek Veriler</label>
+            <div class="checkbox-group">
+              <div class="checkbox-item">
+                <input type="checkbox" id="inflationCheck" checked>
+                <div class="indicator-color" style="background: #E53E3E;"></div>
+                <label for="inflationCheck">Enflasyon (TÜFE)</label>
+              </div>
+              
+              <div class="checkbox-item">
+                <input type="checkbox" id="interestCheck" checked>
+                <div class="indicator-color" style="background: #4299E1;"></div>
+                <label for="interestCheck">Faiz Oranı</label>
+              </div>
+              
+              <div class="checkbox-item">
+                <input type="checkbox" id="producerCheck">
+                <div class="indicator-color" style="background: #F6AD55;"></div>
+                <label for="producerCheck">ÜFE (Üretici)</label>
+              </div>
+            </div>
+          </div>
+          
+          <button id="resetBtn">🔄 Filtreleri Sıfırla</button>
+        </div>
+        
+        <div class="info-box">
+          <h4>ℹ️ Bilgi</h4>
+          <p><strong>TÜFE:</strong> Tüketici Fiyat Endeksi, hanehalkı tüketim malları ve hizmetlerinin fiyat değişimini ölçer.</p>
+          <p style="margin-top: 10px;"><strong>Politika Faizi:</strong> Merkez Bankası'nın belirlediği kısa vadeli borçlanma faiz oranı.</p>
+          <p style="margin-top: 10px;"><strong>ÜFE:</strong> Üretici Fiyat Endeksi, üretim aşamasındaki fiyat değişimlerini gösterir.</p>
+        </div>
+        
+        <div class="stats-cards">
+          <div class="stat-card">
+            <div class="stat-label">Son TÜFE</div>
+            <div class="stat-value" id="lastInflation">-</div>
+            <div class="stat-change" id="inflationChange">-</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-label">Son Faiz</div>
+            <div class="stat-value" id="lastInterest">-</div>
+            <div class="stat-change" id="interestChange">-</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-label">Ort. TÜFE</div>
+            <div class="stat-value" id="avgInflation">-</div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-label">Ort. Faiz</div>
+            <div class="stat-value" id="avgInterest">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="chart-container">
+        <div class="chart-header">
+          <h2>📈 Ekonomik Göstergeler</h2>
+          <p>Türkiye ekonomisinin zaman içindeki gelişimi</p>
+        </div>
+        <canvas id="economyChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <script src="economy.js"></script>
+</body>
+</html>
